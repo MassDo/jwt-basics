@@ -1,11 +1,11 @@
 require('dotenv').config()
 const jwt = require('jsonwebtoken')
-const CustomAPIError = require('../errors/custom-error')
+const {CustomAPIError, BadRequestError, UnauthenticatedError} = require('../errors')
 
 const login = async (req, res)=>{
     const {username, password} = req.body
     if (!username || !password){
-        throw new CustomAPIError('You need to provide username and password ! :(', 400)
+        throw new BadRequestError('You need to provide username and password ! :(')
     }
     // fake id for token
     const id = Date.now()
@@ -14,8 +14,7 @@ const login = async (req, res)=>{
 }
 const dashboard = async (req, res)=>{
     const luckyNumber = Math.floor(Math.random()*100)  
-    res.status(200).json({msg:`Salut  ${req.user.username}!`, secret:`Voici tes données apres authorisation: ${luckyNumber}`})
-       
+    res.status(200).json({msg:`Salut  ${req.user.username}!`, secret:`Voici tes données apres authorisation: ${luckyNumber}`})    
 }
 
 module.exports = {login, dashboard}
